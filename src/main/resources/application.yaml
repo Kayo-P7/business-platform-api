@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: telegram-bot-s
+server:
+  port: 8084
+ # datasource:
+   # url:jdbc:postgresql://localhost:5432/database
+   # username:postgres
+   # password: mypassword
+    #driver-class-name: org.postgresql.Driver
+#  jpa:
+    #show-sql: true
+ #   hibernate:
+ #     ddl-auto: update

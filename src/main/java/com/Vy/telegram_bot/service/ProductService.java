@@ -2,40 +2,45 @@ package com.Vy.telegram_bot.service;
 
 import com.Vy.telegram_bot.dto.ProductRequest;
 import com.Vy.telegram_bot.dto.ProductResponse;
+import com.Vy.telegram_bot.exception.ProductAlreadyExistsException;
+import com.Vy.telegram_bot.exception.ProductNotFoundException;
 import com.Vy.telegram_bot.model.Product;
+import com.Vy.telegram_bot.repository.ProductRepository;
+import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Comparator;
+import java.util.List;
+import java.util.UUID;
 
 @Service
 public class ProductService {
 
-    private final List<Product> products = new ArrayList<>();
-    private static final int LOW_STOCK = 5;
 
-    public ProductResponse createProduct(ProductRequest request) {
-        Product product = new Product();
+    private final ProductRepository productRepository;
 
-        product.setId(UUID.randomUUID());
-        product.setName(request.name());
-        product.setPrice(request.price());
-        product.setDescription(request.description());
-        product.setQuantity(request.quantity());
-        product.setCreatedAt(LocalDateTime.now());
-        product.setActive(true);
-
-
-        products.add(product);
-        return new ProductResponse(product);
-
+    //private static final int LOW_STOCK = 9;
+    public ProductService(ProductRepository productRepository) {
+        this.productRepository = productRepository;
     }
 
 
-    public List<ProductResponse> listProducts() {
-        return products.stream().map(ProductResponse::new).toList();
+    public ProductResponse save(ProductRequest request) {
+        Product product = new Product();
+
+        if (productRepository.existsByName(request.name())) {
+            throw new ProductAlreadyExistsException("Product Already exist! try again");
+        }
+
+        BeanUtils.copyProperties(request, product);
+        product.setCreatedAt(LocalDateTime.now());
+        product.setActive(true);
+        productRepository.save(product);
+        return new ProductResponse(product);
 
     }
 
@@ -43,35 +48,61 @@ public class ProductService {
 //       products.add(product);
 //    }
 
-    public boolean deletarProduct(UUID id) {
-        return products.removeIf(x -> x.getId().equals(id));
+    public Page<ProductResponse> findAll(Pageable pageable) {
+        return productRepository.findAll(pageable).map(ProductResponse::new);
+    }
+
+    public void deletarProduct(UUID id) {
+
+
+        if (!productRepository.existsById(id)) {
+            throw new ProductNotFoundException("Id not found!");
+        }
+
+        productRepository.deleteById(id);
 
     }
 
-    public Optional<Product> findById(UUID id) {
-        return products.stream().filter(p -> p.getId().equals(id)).findFirst();
+    public ProductResponse findById(UUID id) {
+        Product product = productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException("Product not found!"));
+        return new ProductResponse(product);
     }
 
-    public Optional<Product> findByName(String name) {
-        return products.stream().filter(p -> p.getName()
-                .equalsIgnoreCase(name)).findFirst();
+    public ProductResponse findByName(String name) {
+         Product product = productRepository.findByNameContainingIgnoreCase(name).stream().findFirst().orElseThrow(() -> new ProductNotFoundException("Name not found!"));
+        return new ProductResponse(product);
     }
 
-    public List<ProductResponse> findLowStock() {
-        return products.stream().filter(p -> p.getQuantity() < LOW_STOCK).
+    public List<ProductResponse> findLowStock(Integer stock) {
+        return productRepository.findByQuantityLessThanEqual(stock).stream().
                 sorted(Comparator.comparingInt(Product::getQuantity))
                 .map(ProductResponse::new).toList();
     }
 
-    public List<ProductResponse> findActiveProducts() {
-        return products.stream().filter(Product::getActive).map(ProductResponse::new).toList();
+    public List<ProductResponse> findActiveProducts(Boolean b) {
+        return productRepository.findByActive(b).stream().map(ProductResponse::new).toList();
     }
 
     public List<ProductResponse> findProductsByPrice(BigDecimal min, BigDecimal max) {
-        return products.stream().filter(p -> p.getPrice().compareTo(min) >= 0 && p.getPrice().compareTo(max) <= 0).map(ProductResponse::new).toList();
+        return productRepository.findByPriceBetween(min, max).stream().map(ProductResponse::new).toList();
     }
 
-    public List<ProductResponse> findAll(){
-        return products.stream().map(ProductResponse::new).toList();
+    public ProductResponse updateProduct(UUID id, ProductRequest productRequest) {
+
+        Product product = productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException("Id not found!"));
+        BeanUtils.copyProperties(productRequest, product, "id", "createdAt", "active");
+        productRepository.save(product);
+        return new ProductResponse(product);
+    }
+
+    public void deleteAll() {
+        productRepository.deleteAll();
+
+
+    }
+
+    public List<ProductResponse> findByStock( Integer Stock){
+      return productRepository.findByQuantityLessThan( Stock)
+              .stream().map(ProductResponse::new).toList();
     }
 }

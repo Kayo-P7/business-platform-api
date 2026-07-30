@@ -1,0 +1,15 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: business-platforma-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: "909"
+      POSTGRES_DB: business_platform
+    ports:
+      - "5437:5432"
+    volumes:
+      - postgres_dataT:/var/lib/postgresql/data
+
+volumes:
+  postgres_dataT:

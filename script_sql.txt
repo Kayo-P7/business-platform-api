@@ -1,0 +1,9 @@
+CREATE TABLE tb_products(
+id UUID PRIMARY KEY,
+name VARCHAR(200) NOT NULL,
+description VARCHAR(200) NOT NULL,
+price NUMERIC (18,2) NOT NULL,
+quantity INTEGER NOT NULL CHECK(quantity >= 0),
+created_at TIMESTAMP NOT NULL,
+active BOOLEAN DEFAULT FALSE NOT NULL
+);

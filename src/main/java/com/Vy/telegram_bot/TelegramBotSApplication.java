@@ -5,11 +5,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.hibernate.autoconfigure.HibernateJpaAutoConfiguration;
 import org.springframework.boot.jdbc.autoconfigure.DataSourceAutoConfiguration;
 
-//@SpringBootApplication
-@SpringBootApplication(exclude = {
-		DataSourceAutoConfiguration.class,
-		HibernateJpaAutoConfiguration.class
-})
+@SpringBootApplication
+//@SpringBootApplication(exclude = {
+//		DataSourceAutoConfiguration.class,
+//		HibernateJpaAutoConfiguration.class
+//})
 public class TelegramBotSApplication {
 
 	public static void main(String[] args) {

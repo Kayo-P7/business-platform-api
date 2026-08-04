@@ -1,5 +1,6 @@
 package com.Vy.telegram_bot.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -21,6 +22,7 @@ public class Product {
     private BigDecimal price;
     private Integer quantity;
     @Column(name = "created_at")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/yyyy/MM'T'HH:mm:ss'Z'", timezone = "GMT")
     private LocalDateTime createdAt; //Data de criação
     @Column(nullable = false)
     private Boolean active = false; //produto ativo ou desativado

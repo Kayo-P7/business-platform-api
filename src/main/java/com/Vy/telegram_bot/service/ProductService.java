@@ -69,7 +69,7 @@ public class ProductService {
     }
 
     public ProductResponse findByName(String name) {
-         Product product = productRepository.findByNameContainingIgnoreCase(name).stream().findFirst().orElseThrow(() -> new ProductNotFoundException("Name not found!"));
+        Product product = productRepository.findByNameContainingIgnoreCase(name).stream().findFirst().orElseThrow(() -> new ProductNotFoundException("Name not found!"));
         return new ProductResponse(product);
     }
 
@@ -99,10 +99,5 @@ public class ProductService {
         productRepository.deleteAll();
 
 
-    }
-
-    public List<ProductResponse> findByStock( Integer Stock){
-      return productRepository.findByQuantityLessThan( Stock)
-              .stream().map(ProductResponse::new).toList();
     }
 }

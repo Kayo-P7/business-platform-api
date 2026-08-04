@@ -3,9 +3,9 @@ services:
     image: postgres:16
     container_name: business-platforma-db
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: "909"
-      POSTGRES_DB: business_platform
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     ports:
       - "5437:5432"
     volumes:

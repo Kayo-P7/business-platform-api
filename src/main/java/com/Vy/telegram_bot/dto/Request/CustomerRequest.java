@@ -1,4 +1,4 @@
-package com.Vy.telegram_bot.dto;
+package com.Vy.telegram_bot.dto.Request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
@@ -20,7 +20,6 @@ public record CustomerRequest(
                 regexp =
                         "^\\+?55[1-9]{2}(?:9[1-9]{8}|[2-5][8-9]{7}$)",
                 message = "Phone number have to format international correct (+55DDNUMBER)"
-
         )
         String phoneNumber
 ) {

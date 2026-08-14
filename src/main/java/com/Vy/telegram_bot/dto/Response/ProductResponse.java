@@ -1,4 +1,4 @@
-package com.Vy.telegram_bot.dto;
+package com.Vy.telegram_bot.dto.Response;
 
 import com.Vy.telegram_bot.model.Product;
 

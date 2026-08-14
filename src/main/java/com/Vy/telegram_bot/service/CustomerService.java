@@ -1,14 +1,13 @@
 package com.Vy.telegram_bot.service;
 
-import com.Vy.telegram_bot.dto.CustomerRequest;
-import com.Vy.telegram_bot.dto.CustomerResponse;
+import com.Vy.telegram_bot.dto.Request.CustomerRequest;
+import com.Vy.telegram_bot.dto.Response.CustomerResponse;
+import com.Vy.telegram_bot.exception.CustomerNotFoundException;
 import com.Vy.telegram_bot.model.Customer;
-import com.Vy.telegram_bot.model.Product;
 import com.Vy.telegram_bot.repository.CustomerRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -51,7 +50,7 @@ public class CustomerService {
 
     public CustomerResponse updateCustomer(UUID id, CustomerRequest request) {
 
-        Customer customer = customerRepository.findById(id).orElseThrow(() -> new RuntimeException("Id not found!"));
+        Customer customer = customerRepository.findById(id).orElseThrow(() -> new CustomerNotFoundException("Id not found!"));
         BeanUtils.copyProperties(request, customer, "id", "createdAt", "active");
         customerRepository.save(customer);
         return new CustomerResponse(customer);
@@ -61,7 +60,7 @@ public class CustomerService {
     public CustomerResponse findById(UUID id) {
         return customerRepository.findById(id)
                 .map(CustomerResponse::new)
-                .orElseThrow(() -> new RuntimeException("Id not found"));
+                .orElseThrow(() -> new CustomerNotFoundException("Id not found"));
 
     }
 

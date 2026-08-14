@@ -1,4 +1,4 @@
-package com.Vy.telegram_bot.dto;
+package com.Vy.telegram_bot.dto.Request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;

@@ -14,7 +14,7 @@ import java.time.Instant;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(ProductNotFoundException.class)
-    public ResponseEntity<StandardError> productNotFound(
+    public ResponseEntity<StandardError> ProductNotFoundException(
             ProductNotFoundException ex, HttpServletRequest request
     ) {
         StandardError error = new StandardError
@@ -29,18 +29,18 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(InsufficientStockException.class)
-    public ResponseEntity<StandardError> InsufficientSock
+    public ResponseEntity<StandardError> InsufficientStockException
             (
                     InsufficientStockException ex, HttpServletRequest request
             ) {
         StandardError error = new StandardError(
                 Instant.now(),
-                HttpStatus.BAD_REQUEST.value(),
-                "Stock Insufficient",
+                HttpStatus.CONFLICT.value(),
+                "Insufficient product quantity / Insufficient stock",
                 ex.getMessage(),
                 request.getRequestURI()
         );
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
     }
 
     @ExceptionHandler(ProductAlreadyExistsException.class)
@@ -86,5 +86,71 @@ public class GlobalExceptionHandler {
                 request.getRequestURI()
         );
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    }
+
+    @ExceptionHandler(CustomerNotFoundException.class)
+    public ResponseEntity<StandardError> CustomerNotFoundException(CustomerNotFoundException ex, HttpServletRequest request) {
+        StandardError error = new StandardError(
+                Instant.now(),
+                HttpStatus.NOT_FOUND.value(),
+                "Resource not found",
+                ex.getMessage(),
+                request.getRequestURI()
+        );
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
+    @ExceptionHandler(InvalidOrderStatusException.class)
+    public ResponseEntity<StandardError> InvalidOrderStatusException(InvalidOrderStatusException ex, HttpServletRequest request) {
+        StandardError error = new StandardError(
+                Instant.now(),
+                HttpStatus.CONFLICT.value(),
+                "information invalid, not can update",
+                ex.getMessage(),
+                request.getRequestURI()
+        );
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+    }
+
+    @ExceptionHandler(OrderNotFoundException.class)
+    public ResponseEntity<StandardError> OrderNotFoundException(
+            OrderNotFoundException ex, HttpServletRequest request
+    ) {
+        StandardError error = new StandardError(
+                Instant.now(),
+                HttpStatus.NOT_FOUND.value(),
+                "Resource not found",
+                ex.getMessage(),
+                request.getRequestURI()
+        );
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
+    @ExceptionHandler(ProductInactiveException.class)
+    public ResponseEntity<StandardError> ProductInactiveException(
+           ProductInactiveException ex, HttpServletRequest request
+    ){
+        StandardError error = new StandardError(
+                Instant.now(),
+                HttpStatus.CONFLICT.value(),
+                "Product is inactive and cannot be updated.",
+                ex.getMessage(),
+                request.getRequestURI()
+        );
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+    }
+
+    @ExceptionHandler(CustomerInactiveException.class)
+    public ResponseEntity<StandardError> CustomerInactiveException(
+            CustomerInactiveException ex, HttpServletRequest request
+    ){
+        StandardError error = new StandardError(
+                Instant.now(),
+                HttpStatus.CONFLICT.value(),
+                "Customer is inactive and cannot be updated.",
+                ex.getMessage(),
+                request.getRequestURI()
+        );
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
     }
 }

@@ -1,11 +1,15 @@
 package com.Vy.telegram_bot.service;
 
-import com.Vy.telegram_bot.dto.ProductRequest;
-import com.Vy.telegram_bot.dto.ProductResponse;
+import com.Vy.telegram_bot.dto.active.ProductActiveRequest;
+import com.Vy.telegram_bot.dto.active.ProductActiveResponse;
+import com.Vy.telegram_bot.dto.Request.ProductRequest;
+import com.Vy.telegram_bot.dto.Response.ProductResponse;
 import com.Vy.telegram_bot.exception.ProductAlreadyExistsException;
+import com.Vy.telegram_bot.exception.ProductInactiveException;
 import com.Vy.telegram_bot.exception.ProductNotFoundException;
 import com.Vy.telegram_bot.model.Product;
 import com.Vy.telegram_bot.repository.ProductRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -79,8 +83,8 @@ public class ProductService {
                 .map(ProductResponse::new).toList();
     }
 
-    public List<ProductResponse> findActiveProducts(Boolean b) {
-        return productRepository.findByActive(b).stream().map(ProductResponse::new).toList();
+    public List<ProductResponse> findActiveProducts(Boolean active) {
+        return productRepository.findByActive(active).stream().map(ProductResponse::new).toList();
     }
 
     public List<ProductResponse> findProductsByPrice(BigDecimal min, BigDecimal max) {
@@ -89,7 +93,11 @@ public class ProductService {
 
     public ProductResponse updateProduct(UUID id, ProductRequest productRequest) {
 
+
         Product product = productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException("Id not found!"));
+        if (product.getActive() == false) {
+            throw new ProductInactiveException("Product inactive, dont can update");
+        }
         BeanUtils.copyProperties(productRequest, product, "id", "createdAt", "active");
         productRepository.save(product);
         return new ProductResponse(product);
@@ -97,7 +105,16 @@ public class ProductService {
 
     public void deleteAll() {
         productRepository.deleteAll();
+    }
 
+    @Transactional
+    public ProductActiveResponse updateActive(UUID id, ProductActiveRequest request) {
+        Product product = productRepository
+                .findById(id)
+                .orElseThrow(() -> new ProductNotFoundException("Product not found!"));
 
+        product.setActive(request.active());
+
+        return new ProductActiveResponse(product);
     }
 }

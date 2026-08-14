@@ -1,7 +1,7 @@
 package com.Vy.telegram_bot.controller;
 
-import com.Vy.telegram_bot.dto.CustomerRequest;
-import com.Vy.telegram_bot.dto.CustomerResponse;
+import com.Vy.telegram_bot.dto.Request.CustomerRequest;
+import com.Vy.telegram_bot.dto.Response.CustomerResponse;
 import com.Vy.telegram_bot.service.CustomerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -100,7 +100,7 @@ public class CustomerController {
             @ApiResponse(responseCode = "200", description = "Customer found"),
             @ApiResponse(responseCode = "404", description = "Customer not found")
     })
-    @GetMapping("{name}")
+    @GetMapping("/name/{name}")
     public ResponseEntity<CustomerResponse> findByName(@PathVariable("name") String name) {
         return ResponseEntity.ok(customerService.findByName(name));
     }

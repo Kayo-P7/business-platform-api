@@ -41,15 +41,19 @@ public class OrderItem {
 
     public void setOrder(Order order) {
         this.order = order;
-        if(order != null) {
+        if (order != null) {
             this.pkOrderAndProduct.setOrderId(order.getId());
         }
     }
 
     public void setProduct(Product product) {
         this.product = product;
-        if(product != null) {
+        if (product != null) {
             this.pkOrderAndProduct.setProductId(product.getId());
         }
+    }
+
+    public BigDecimal getTotal() {
+        return price.multiply(BigDecimal.valueOf(quantity));
     }
 }

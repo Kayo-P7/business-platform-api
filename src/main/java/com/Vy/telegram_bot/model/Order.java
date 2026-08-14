@@ -1,6 +1,7 @@
 package com.Vy.telegram_bot.model;
 
 import com.Vy.telegram_bot.enums.OrderStatus;
+import com.Vy.telegram_bot.enums.OrderStatusConverter;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,7 +24,8 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-    private OrderStatus orderStatus;
+    @Convert(converter = OrderStatusConverter.class)
+    private OrderStatus orderStatus = OrderStatus.PENDING;
     private LocalDateTime createdAt;
 
     @ManyToOne
@@ -32,13 +34,14 @@ public class Order {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     List<OrderItem> items = new ArrayList<>();
 
+
     public BigDecimal getTotal() {
 
-      BigDecimal total = BigDecimal.ZERO;
-
+        BigDecimal total = BigDecimal.ZERO;
         for (OrderItem item : items) {
-            total = total.add(item.getPrice().multiply(BigDecimal.valueOf(item.getQuantity())));
+            total = total.add(item.getTotal());
         }
         return total;
     }
+
 }

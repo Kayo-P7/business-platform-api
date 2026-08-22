@@ -1,6 +1,7 @@
 package com.Vy.telegram_bot.controller;
 
 import com.Vy.telegram_bot.dto.Request.CustomerRequest;
+import com.Vy.telegram_bot.dto.Request.RegisterRequest;
 import com.Vy.telegram_bot.dto.Response.CustomerResponse;
 import com.Vy.telegram_bot.service.CustomerService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -38,8 +39,8 @@ public class CustomerController {
             @ApiResponse(responseCode = "201", description = "Customer created successfully"),
             @ApiResponse(responseCode = "400", description = "Invalid request payload")
     })
-    @PostMapping
-    public ResponseEntity<CustomerResponse> save(@Valid @RequestBody CustomerRequest request) {
+    @PostMapping("/register")
+    public ResponseEntity<CustomerResponse> save(@Valid @RequestBody RegisterRequest request) {
 
         CustomerResponse customerResponse = customerService.save(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(customerResponse);

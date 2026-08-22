@@ -48,10 +48,6 @@ public class ProductService {
 
     }
 
-//    public void addProduct(Product product) {
-//       products.add(product);
-//    }
-
     public Page<ProductResponse> findAll(Pageable pageable) {
         return productRepository.findAll(pageable).map(ProductResponse::new);
     }

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.time.Instant;
+import java.util.List;
 
 @ControllerAdvice // essa classe vai observar todos os controllers da aplicação e tratar situações específicas
 public class GlobalExceptionHandler {
@@ -128,8 +129,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ProductInactiveException.class)
     public ResponseEntity<StandardError> ProductInactiveException(
-           ProductInactiveException ex, HttpServletRequest request
-    ){
+            ProductInactiveException ex, HttpServletRequest request
+    ) {
         StandardError error = new StandardError(
                 Instant.now(),
                 HttpStatus.CONFLICT.value(),
@@ -143,7 +144,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(CustomerInactiveException.class)
     public ResponseEntity<StandardError> CustomerInactiveException(
             CustomerInactiveException ex, HttpServletRequest request
-    ){
+    ) {
         StandardError error = new StandardError(
                 Instant.now(),
                 HttpStatus.CONFLICT.value(),
@@ -152,5 +153,20 @@ public class GlobalExceptionHandler {
                 request.getRequestURI()
         );
         return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<StandardError> UserNotFoundException(
+            UserNotFoundException userNotFoundException,
+            HttpServletRequest request
+    ) {
+        StandardError error = new StandardError(
+                Instant.now(),
+                HttpStatus.NOT_FOUND.value(),
+                "User Not Found",
+                userNotFoundException.getMessage(),
+                request.getRequestURI()
+        );
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
 }

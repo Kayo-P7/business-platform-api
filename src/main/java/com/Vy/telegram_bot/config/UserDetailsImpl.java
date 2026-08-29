@@ -8,7 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
-
+/*#1*/
 public class UserDetailsImpl implements UserDetails {
     //representa os dados do usuário para o Spring Security
     //Representa o usuario encontrado

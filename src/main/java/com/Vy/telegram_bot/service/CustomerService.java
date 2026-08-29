@@ -53,6 +53,7 @@ public class CustomerService {
 
         user.setRole(RoleStatus.CUSTOMER);
         user.setCustomer(customer);
+        /*#1*/
         user.setPassword(passwordEncoder.encode(registerRequest.password()));
 
         customerRepository.save(customer);

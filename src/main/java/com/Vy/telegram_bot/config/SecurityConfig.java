@@ -9,19 +9,20 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+
 @Configuration
 public class SecurityConfig {
-
+    /*#1*/
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
+    /*#2*/
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception{
         return configuration.getAuthenticationManager();
     }
-
+    /*#1*/
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         //toda requisição precisa ser feita por alguém autenticado ->  httpSecurity.authorizeHttpRequests(auth -> auth.anyRequest().authenticated());
@@ -32,5 +33,6 @@ public class SecurityConfig {
 
         return httpSecurity.build();
     }
+
 
 }

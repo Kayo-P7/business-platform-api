@@ -1,317 +1,104 @@
-````markdown
-# Business Platform API
+# TelegramBot API
 
-RESTful e-commerce backend developed with **Java** and **Spring Boot**, focused on backend architecture, business rules, relational database modeling, API development, and automated testing.
+API backend de uma plataforma de ofertas integrada ao Telegram.
 
-The project is being developed incrementally as a backend learning and portfolio project.
+O projeto tem como objetivo disponibilizar produtos e ofertas em diferentes canais,
+permitindo que o usuário consulte as ofertas através de uma aplicação web ou de um
+bot do Telegram.
 
----
+## Objetivo
 
-## 🚀 Implemented Features
+A aplicação está sendo desenvolvida como um projeto de estudo e prática de
+desenvolvimento backend com Java e Spring Boot.
 
-### Product Management
+A ideia é integrar:
 
-- Create products
-- Update products
-- Delete products
-- Delete all products
-- Find product by ID
-- Find product by name
-- Search products by price range
-- Search products with low stock
-- Search products by active status
-- Stock management
-- Pagination and sorting
-- Bean Validation
-- Swagger/OpenAPI documentation
+- Backend REST
+- Aplicação Web (Frontend)
+- Bot do Telegram
+- Integração com produtos/ofertas da Amazon
 
-### Customer Management
+Os produtos poderão ser consultados pelo site e também através do Telegram.
 
-- Create customers
-- Update customers
-- Delete customers
-- Find customer by ID
-- Find customer by name
-- Pagination and sorting
-- Email validation
-- Phone number validation
-- Customer active status
-- Relationship between customers and orders
+## Tecnologias
 
-### Order Management
-
-- Create orders
-- Find orders by ID
-- List orders with pagination
-- Update order status
-- Associate orders with customers
-- Associate multiple products with a single order
-- `OrderItem` entity for the relationship between orders and products
-- Automatic order total calculation
-- Stock validation
-- Customer active status validation
-- Product active status validation
-- Insufficient stock validation
-
-### Exception Handling
-
-- Global exception handler
-- Custom business exceptions
-- Resource not found handling
-- Inactive customer validation
-- Inactive product validation
-- Insufficient stock handling
-- HTTP status code mapping
-
-### Testing
-
-- Unit tests with JUnit 5
-- Mockito
-- Mocked repositories
-- Business rule testing
-- Exception scenario testing
-- Service layer testing
-
-Current tests cover important `OrderService` scenarios such as:
-
-- Order found
-- Customer not found
-- Inactive customer
-- Product not found
-- Inactive product
-- Insufficient stock
-
----
-
-## 🛠️ Technologies
-
-- Java 26
-- Spring Boot 4
+- Java
+- Spring Boot
+- Spring Security
+- JWT
 - Spring Data JPA
-- Hibernate
 - PostgreSQL
-- Maven
-- Lombok
 - Docker
-- JUnit 5
-- Mockito
-- Swagger / OpenAPI
+- Maven
+- REST API
+- Telegram Bot API
 
----
+## Segurança
 
-## 🏗️ Architecture
+A API utiliza Spring Security e JWT para autenticação e autorização.
 
-The project follows a layered architecture:
+Atualmente estão sendo implementados conceitos como:
 
-```text
-Controller
-     │
-     ▼
-Service
-     │
-     ▼
-Repository
-     │
-     ▼
-PostgreSQL
-````
+- `UserDetails`
+- `UserDetailsService`
+- `AuthenticationManager`
+- `UsernamePasswordAuthenticationToken`
+- JWT
+- `SecurityContext`
+- `SecurityContextHolder`
+- `OncePerRequestFilter`
+- BCrypt
+- Roles e Authorities
+- Autorização baseada em roles
 
-### Main Layers
+### Roles
 
-* **Controller** — Handles HTTP requests and responses.
-* **Service** — Contains business rules and application logic.
-* **Repository** — Handles database access using Spring Data JPA.
-* **DTO** — Separates API request/response models from entities.
-* **Model** — Represents the domain entities.
-* **Exception** — Contains custom exceptions and global exception handling.
+Atualmente existem diferentes níveis de acesso:
 
----
+- `CUSTOMER` — acesso às ofertas disponíveis.
+- `ADMIN` — gerenciamento dos recursos administrativos da plataforma.
 
-## 📦 Domain Model
+## Funcionalidades
 
-```text
-Customer
-   │
-   │ 1:N
-   ▼
-Order
-   │
-   │ 1:N
-   ▼
-OrderItem
-   ▲
-   │ N:1
-Product
-```
+### Autenticação
 
-`OrderItem` represents the relationship between `Order` and `Product`.
+- Login
+- Registro de usuário
+- Geração de JWT
+- Validação do JWT
+- Autenticação através de Bearer Token
 
-It stores:
+### Produtos
 
-* Product
-* Order
-* Quantity
-* Purchase price
+- Consulta de produtos
+- Busca por nome
+- Gerenciamento administrativo dos produtos
+- Controle de acesso baseado em roles
 
-This allows a single order to contain multiple products while preserving the price recorded at the time of purchase.
+### Em desenvolvimento
 
----
+- Integração com Amazon
+- Bot do Telegram
+- Frontend
+- Sistema de ofertas e promoções
+- Integração entre API, frontend e Telegram
 
-## 📚 API Documentation
+## Arquitetura
 
-The API is documented using Swagger/OpenAPI.
+O projeto está sendo desenvolvido utilizando uma arquitetura baseada em camadas,
+separando responsabilidades entre:
 
-After starting the application, Swagger UI is available at:
+- Controllers
+- Services
+- Repositories
+- DTOs
+- Models/Entities
+- Security
+- Exceptions
 
-```text
-http://localhost:8084/swagger-ui/index.html
-```
+## Status
 
-Swagger provides interactive documentation for the available REST endpoints.
+🚧 Em desenvolvimento.
 
----
-
-## 🧪 Testing
-
-Run all tests using the Maven Wrapper:
-
-```bash
-./mvnw test
-```
-
-The project uses **JUnit 5 and Mockito** for unit testing.
-
-The tests focus mainly on validating business rules and service behavior without directly depending on the real database.
-
-Example:
-
-```text
-OrderService
-     │
-     ├── CustomerRepository → Mock
-     ├── ProductRepository  → Mock
-     └── OrderRepository    → Mock
-```
-
----
-
-## ▶️ Running the Project
-
-### Clone the repository
-
-```bash
-git clone https://github.com/your-username/business-platform-api.git
-cd business-platform-api
-```
-
-### Database
-
-The application uses **PostgreSQL**.
-
-Configure the database connection according to the application's configuration and environment variables.
-
-Example:
-
-```text
-DB_URL=
-DB_USERNAME=
-DB_PASSWORD=
-```
-
-### Run the application
-
-Using the Maven Wrapper:
-
-```bash
-./mvnw spring-boot:run
-```
-
-### Run the tests
-
-```bash
-./mvnw test
-```
-
----
-
-# 🔮 Next Steps
-
-The project will continue evolving with additional backend concepts and infrastructure.
-
-## 🔐 Security
-
-* [ ] Spring Security
-* [ ] JWT authentication
-* [ ] Authorization and roles
-
-## 🗄️ Database
-
-* [ ] Flyway migrations
-* [ ] Improve database constraints
-* [ ] Improve transaction management
-
-## 🧪 Testing
-
-* [ ] Expand unit test coverage
-* [ ] Integration tests
-* [ ] Repository tests
-* [ ] Controller tests
-
-## 🏗️ Architecture
-
-* [ ] Refactor services with many responsibilities
-* [ ] Improve domain organization
-* [ ] Improve DTO and validation structure
-* [ ] Improve API error responses
-
-## ⚙️ Infrastructure
-
-* [ ] CI/CD
-* [ ] Improve Docker configuration
-* [ ] Application deployment
-* [ ] Cloud infrastructure
-
-## 📡 Messaging and Integrations
-
-* [ ] Telegram notification integration
-* [ ] RabbitMQ or Kafka
-* [ ] Redis
-
-## ☁️ Future Architecture
-
-* [ ] AWS
-* [ ] Microservices
-* [ ] Kubernetes
-
----
-
-## 🎯 Project Goal
-
-The goal of this project is to progressively build a complete backend application while applying real-world development practices.
-
-The project is being used to study and practice:
-
-* Java
-* Spring Boot
-* REST APIs
-* JPA/Hibernate
-* PostgreSQL
-* Docker
-* Business rules
-* DTO pattern
-* Exception handling
-* Automated testing
-* API documentation
-* Git and GitHub
-* Software architecture
-
-The project will continue evolving as new backend concepts are learned and implemented.
-
----
-
-## 👨‍💻 Author
-
-Developed as a backend learning and portfolio project focused on **Java, Spring Boot, REST APIs, PostgreSQL, JPA/Hibernate, automated testing, and backend architecture**.
-
-```
-```
+O projeto continua sendo desenvolvido e novas funcionalidades serão adicionadas
+gradualmente.

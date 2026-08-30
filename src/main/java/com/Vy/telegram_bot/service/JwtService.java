@@ -31,7 +31,11 @@ public class JwtService {
     public String generatedToken(Authentication authentication) {
         Date now = new Date();
         return Jwts.builder()
-                .subject(authentication.getName())//define quem é o usuario
+                .subject(authentication.getName())/*define quem é o usuario
+                *se conecta com o userDetailsImpl(getName)
+                *
+                */
+
                 .issuedAt(now)
                 .expiration(new Date(now.getTime() + 3600000))
                 .signWith(getSigningKey())//assina usando a chave

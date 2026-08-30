@@ -88,7 +88,7 @@ public class ProductController {
                     description = "Product retrieved successfully"
             )
     })
-    @GetMapping
+    @GetMapping("/findAll")
     public ResponseEntity<Page<ProductResponse>> findAll(Pageable pageable) {
         return ResponseEntity.ok(productService.findAll(pageable));
     }

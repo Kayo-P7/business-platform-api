@@ -7,18 +7,18 @@ import java.util.UUID;
 
 public record ProductResponse(
         UUID id,
-        String name,
+        String title,
         String description,
         BigDecimal price,
-        Integer quantity
+        Integer stock
 ) {
     public ProductResponse(Product product){
         this(
                 product.getId(),
-                product.getName(),
+                product.getTitle(),
                 product.getDescription(),
                 product.getPrice(),
-                product.getQuantity()
+                product.getStock()
         );
     }
 }

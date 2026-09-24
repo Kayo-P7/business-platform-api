@@ -70,12 +70,12 @@ public class OrderService {
             if (!product.getActive()) {
                 throw new ProductInactiveException("Product is inactive");//ProductNotActiveException
             }
-            if (item.quantity() > product.getQuantity()) {
+            if (item.quantity() > product.getStock()) {
                 throw new InsufficientStockException("Quantity product insufficient");
             }
 
 
-            product.setQuantity(product.getQuantity() - item.quantity());
+            product.setStock(product.getStock() - item.quantity());
 
             orderItem.setQuantity(item.quantity());
             orderItem.setPrice(product.getPrice());

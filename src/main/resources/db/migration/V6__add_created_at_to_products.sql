@@ -1,0 +1,2 @@
+ALTER TABLE tb_products
+    ADD COLUMN created_at TIMESTAMP WITH TIME ZONE;

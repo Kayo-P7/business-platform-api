@@ -6,14 +6,14 @@ import java.util.UUID;
 
 public record ProductActiveResponse(
         UUID id,
-        String name,
+        String title,
         String description,
         Boolean active
 ) {
     public ProductActiveResponse(Product product){
         this(
                 product.getId(),
-                product.getName(),
+                product.getTitle(),
                 product.getDescription(),
                 product.getActive()
         );

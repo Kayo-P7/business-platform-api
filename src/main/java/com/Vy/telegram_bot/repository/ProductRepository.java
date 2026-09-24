@@ -8,17 +8,17 @@ import java.util.List;
 import java.util.UUID;
 
 public interface ProductRepository extends JpaRepository<Product, UUID> {
-    boolean existsByName(String name);
+    boolean existsByTitle(String name);
 
-    List<Product> findByNameContainingIgnoreCase(String name);
+    List<Product> findByTitleContainingIgnoreCase(String name);
 
-    List<Product> findByQuantityLessThanEqual(Integer quantity);
+    List<Product> findByStockLessThanEqual(Integer quantity);
 
     List<Product> findByActive(Boolean b);
 
     List<Product> findByPriceBetween(BigDecimal min, BigDecimal max);
 
-    List<Product> findByQuantityLessThan(Integer quantity);
-    List<Product> findByIdAndQuantity(UUID id, Integer quantity);
+    List<Product> findByStockLessThan(Integer quantity);
+    List<Product> findByIdAndStock(UUID id, Integer quantity);
 
 }

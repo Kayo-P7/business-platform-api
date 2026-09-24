@@ -16,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
@@ -27,7 +28,6 @@ public class ProductService {
 
     private final ProductRepository productRepository;
 
-    //private static final int LOW_STOCK = 9;
     public ProductService(ProductRepository productRepository) {
         this.productRepository = productRepository;
     }
@@ -36,16 +36,33 @@ public class ProductService {
     public ProductResponse save(ProductRequest request) {
         Product product = new Product();
 
-        if (productRepository.existsByName(request.name())) {
+        if (productRepository.existsByTitle(request.title())) {
             throw new ProductAlreadyExistsException("Product Already exist! try again");
         }
 
+
         BeanUtils.copyProperties(request, product);
-        product.setCreatedAt(LocalDateTime.now());
+        product.getMeta().setCreatedAt(Instant.now());
         product.setActive(true);
+
+        product.setAvailabilityStatus(avaliabilityStatus(product.getStock()));
+
         productRepository.save(product);
         return new ProductResponse(product);
 
+    }
+
+    public String avaliabilityStatus(Integer stock) {
+
+        if (stock == 0) {
+            return "Out of Stock";
+        }
+        else if (stock <= 20) {
+            return "Low Stock";
+        }
+        else {
+            return "In Stock";
+        }
     }
 
     public Page<ProductResponse> findAll(Pageable pageable) {
@@ -69,13 +86,13 @@ public class ProductService {
     }
 
     public ProductResponse findByName(String name) {
-        Product product = productRepository.findByNameContainingIgnoreCase(name).stream().findFirst().orElseThrow(() -> new ProductNotFoundException("Name not found!"));
+        Product product = productRepository.findByTitleContainingIgnoreCase(name).stream().findFirst().orElseThrow(() -> new ProductNotFoundException("Name not found!"));
         return new ProductResponse(product);
     }
 
     public List<ProductResponse> findLowStock(Integer stock) {
-        return productRepository.findByQuantityLessThanEqual(stock).stream().
-                sorted(Comparator.comparingInt(Product::getQuantity))
+        return productRepository.findByStockLessThanEqual(stock).stream().
+                sorted(Comparator.comparingInt(Product::getStock))
                 .map(ProductResponse::new).toList();
     }
 
